@@ -1,0 +1,1 @@
+﻿Foram realizados ao todo 35 exercícios da lista
