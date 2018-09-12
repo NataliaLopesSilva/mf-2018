@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Aplicacao {
 
@@ -18,16 +17,13 @@ public class Aplicacao {
 
     public static void main(String[] args) throws MalformedURLException, IOException {
         try {
-
-            System.out.print("Digite a url desejada: ");
-
-            Scanner ler = new Scanner(System.in);
             String urlInserida;
-            urlInserida = ler.nextLine();
 
-            if (urlInserida.equals("")) {
-                urlInserida = "http://repositorio.dados.gov.br/educacao/CADASTRO%20DAS%20IES_2011.csv";
-            } 
+            if (args != null && args.length > 0) {
+            urlInserida = args[0];
+        } else {
+            urlInserida = "http://repositorio.dados.gov.br/educacao/CADASTRO%20DAS%20IES_2011.csv";
+        }
 
             URL url = new URL(urlInserida);
             String destino = "D:\\CADASTRO%20DAS%20IES_2011.csv";
