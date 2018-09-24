@@ -3,7 +3,7 @@
  * Fábrica de Software - Instituto de Informática (UFG)
  * Creative Commons Attribution 4.0 International License.
  */
-package com.github.NataliaLopesSilva.csv;
+package com.github.NataliaLopesSilva.mf2018.csv;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

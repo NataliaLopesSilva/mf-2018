@@ -14,7 +14,7 @@
     "com.github.kyriosdata.exemplo.ProgramaCalendario". -->
 
     <groupId>com.github.NataliaLopesSilva.mf2018</groupId>    <!-- (!) -->
-    <artifactId>DiretorioListarArquivo</artifactId>    <!-- (!) -->
+    <artifactId>diretorioListarArquivo</artifactId>    <!-- (!) -->
     <packaging>jar</packaging>
     <version>1.0.0</version>
 

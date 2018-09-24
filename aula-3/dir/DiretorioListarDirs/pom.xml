@@ -14,14 +14,14 @@
     "com.github.kyriosdata.exemplo.ProgramaCalendario". -->
 
     <groupId>com.github.NataliaLopesSilva.mf2018</groupId>    <!-- (!) -->
-    <artifactId>csv</artifactId>    <!-- (!) -->
+    <artifactId>diretorioListarDirs</artifactId>    <!-- (!) -->
     <packaging>jar</packaging>
     <version>1.0.0</version>
 
     <properties>
         <project.githubUser>NataliaLopesSilva</project.githubUser>        <!-- (!) -->
         <project.githubRepository>mf-2018</project.githubRepository>        <!-- (!) -->
-        <project.mainClassName>Aplicacao</project.mainClassName>        <!-- (!) -->
+        <project.mainClassName>DiretorioListarDirs</project.mainClassName>        <!-- (!) -->
 
         <project.mainClass>${project.groupId}.${project.artifactId}.${project.mainClassName}</project.mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
