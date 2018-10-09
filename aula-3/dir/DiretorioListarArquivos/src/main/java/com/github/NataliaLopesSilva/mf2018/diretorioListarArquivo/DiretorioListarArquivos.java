@@ -9,6 +9,10 @@ import java.io.File;
 
 public class DiretorioListarArquivos {
 
+    /**
+     * Classe principal
+     * @param args
+     */
     public static void main(String[] args) {
         //Captura diretório corrente
         String path = new File("").getAbsolutePath();
@@ -16,6 +20,10 @@ public class DiretorioListarArquivos {
         listaArquivos(path);
     }
 
+    /**
+     * Método que lista os arquivos
+     * @param path : caminho do arquivo
+     */
     public static void listaArquivos(String path) {
         File d = new File(path);
         File[] files = d.listFiles();

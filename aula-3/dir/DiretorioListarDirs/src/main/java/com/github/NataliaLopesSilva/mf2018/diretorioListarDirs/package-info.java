@@ -3,6 +3,6 @@
  * está o diretório dir onde se localiza este projeto, que possui uma classes
  * apenas: {@link com.github.NataliaLopesSilva.mf2018.diretorioListarDirs.DiretorioListarDirs}.
  *
- * @see com.github.NataliaLopesSilva.csv.Aplicacao
+ * @see com.github.NataliaLopesSilva.mf2018.diretorioListarDirs.DiretorioListarDirs
  */
 package com.github.NataliaLopesSilva.mf2018.diretorioListarDirs;

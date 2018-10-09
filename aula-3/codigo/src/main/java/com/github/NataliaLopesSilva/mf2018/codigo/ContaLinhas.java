@@ -15,43 +15,37 @@ public class ContaLinhas {
     private static int contTotalLinhas = 0;
     private static String extensao = "";
 
-    public static int getContTotalLinhas() {
-        return contTotalLinhas;
-    }
-
-    public static void setContTotalLinhas(int contTotalLinhas) {
-        ContaLinhas.contTotalLinhas += contTotalLinhas;
-    }
-
-    public static String getExtensao() {
-        return extensao;
-    }
-
-    public static void setExtensao(String extensao) {
-        ContaLinhas.extensao = extensao;
-    }
-
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         String path = "";
 
         if (args != null && args.length == 1) {
             //Captura diretório corrente
             path = new File("").getAbsolutePath();
-            setExtensao(args[0]);
+            extensao = args[0];
 
             contaLinhasArquivos(path);
-            System.out.println("Total de linhas: " + getContTotalLinhas());
+            System.out.println("Total de linhas: " + contTotalLinhas);
         } else if (args != null && args.length > 1) {
             path = args[0];
-            setExtensao(args[1]);
+            extensao = args[1];
 
             contaLinhasArquivos(path);
-            System.out.println("Total de linhas: " + getContTotalLinhas());
+            System.out.println("Total de linhas: " + contTotalLinhas);
         } else {
             System.out.println("Extensão não informada...");
         }
     }
 
+    /**
+     * Método responsável por contar as linhas do arquivo.
+     * @param path: caminho do arquivo
+     * @throws IOException
+     */
     public static void contaLinhasArquivos(String path) throws IOException {
         File d = new File(path);
         File[] files = d.listFiles();
@@ -62,13 +56,13 @@ public class ContaLinhas {
                 File arquivoLeitura = new File(files[i].getPath());
 
                 if (arquivoLeitura.isFile() && getExtensaoArquivo(
-                        arquivoLeitura.getName()).equals(getExtensao())) {
+                        arquivoLeitura.getName()).equals(extensao)) {
 
                     LineNumberReader linhaLeitura = new LineNumberReader(
                             new FileReader(arquivoLeitura));
                     linhaLeitura.skip(arquivoLeitura.length());
                     int qtdLinha = linhaLeitura.getLineNumber() + 1;
-                    setContTotalLinhas(qtdLinha);
+                    contTotalLinhas = qtdLinha;
                     System.out.println(files[i].getPath() + " " + qtdLinha);
                 }
 
@@ -77,7 +71,12 @@ public class ContaLinhas {
         }
     }
 
-    static String getExtensaoArquivo(String nomeArquivo) {
+    /**
+     * Método que identifica a extensão do arquivo
+     * @param nomeArquivo
+     * @return
+     */
+    public static String getExtensaoArquivo(String nomeArquivo) {
         if (nomeArquivo.contains(".")) {
             return nomeArquivo.substring(nomeArquivo.lastIndexOf("."));
         } else {
