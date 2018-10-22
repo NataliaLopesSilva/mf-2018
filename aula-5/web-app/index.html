@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Bibliotecas Boostrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <!--Biblioteca de icones FA Awesome-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous">
+
+    <!--Biblioteca jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+        var listaEstabelecimentosSaude = new Array();
+
+        // Code goes here
+        function carregaPagina() {
+            $.getJSON("../cnes/NomeArquivo.json", function (dt) {
+                var url = "../cnes/" + dt;
+
+                $.getJSON(url, function (data) {
+
+                    listaEstabelecimentosSaude = data;
+
+                    for (let i = 0; i < listaEstabelecimentosSaude.length; i++) {
+                        AddTableRow(listaEstabelecimentosSaude[i].codEstabelecimento, listaEstabelecimentosSaude[i].razaoSocial,
+                            listaEstabelecimentosSaude[i].latitude, listaEstabelecimentosSaude[i].longitude);
+
+                        if (i === 499) {
+                            $("#carregandoRegistros").hide();
+                            $("#conteudo").show();
+                            $("#resultadoLista").text("Exibindo 500 de " + listaEstabelecimentosSaude.length + " registros");
+
+                            return false;
+                        }
+                    }
+                });
+            });
+        }
+
+        //Adiciona linha na tabela
+        function AddTableRow(codEstabelecimento, razaoSocial, latitude, longitude) {
+            var linha = $("<tr onclick = 'defineLocalizacaoMapa(this)'>");
+            var coluna = "";
+
+            coluna += '<td style="width: 178px">' + codEstabelecimento.replace('"', '').replace('"', '') + '</td>';
+            coluna += '<td style="width: 535px">' + razaoSocial.replace('"', '').replace('"', '') + '</td>';
+            coluna += '<td style="width: 193px">' + latitude.replace('"', '').replace('"', '') + '</td>';
+            coluna += '<td style="width: 201px">' + longitude.replace('"', '').replace('"', '') + '</td>';
+
+            linha.append(coluna);
+
+            $("#tblEstabelecimentoSaude").append(linha);
+            return false;
+        };
+
+        //Pega ação de digitar no campo de pesquisa
+        function campoPesquisar(valorPesquisa) {
+            $("#iconLoading").show();
+            $("#mapaRegistro").html("");
+            $("#resultadoLista").text("");
+            $("#tblEstabelecimentoSaude > tbody").html("");
+
+            delay(function () {
+                var lista = pesquisaRegistros(valorPesquisa);
+                $("#iconLoading").hide();
+            }, 1000);
+        };
+
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        //Pesquisa na tabela de acordo com o valor colocado no campo de texto
+        function pesquisaRegistros(valorPesquisa) {
+            var cont = 0, contItens = 0;
+
+            for (let i = 0; i < listaEstabelecimentosSaude.length; i++) {
+                if (listaEstabelecimentosSaude[i].codEstabelecimento.indexOf(valorPesquisa) > -1 ||
+                    listaEstabelecimentosSaude[i].razaoSocial.indexOf(valorPesquisa) > -1 ||
+                    listaEstabelecimentosSaude[i].razaoSocial.indexOf(valorPesquisa.toUpperCase()) > -1) {
+
+                    cont++;
+
+                    if (contItens <= 499) {
+                        contItens++;
+
+                        AddTableRow(listaEstabelecimentosSaude[i].codEstabelecimento, listaEstabelecimentosSaude[i].razaoSocial,
+                            listaEstabelecimentosSaude[i].latitude, listaEstabelecimentosSaude[i].longitude);
+                    }
+                }
+            }
+
+            $("#resultadoLista").text("Exibindo " + contItens + " de " + cont + " registros");
+        }
+
+        //Através do clique na linha define local no mapa
+        function defineLocalizacaoMapa(linha) {
+            $("#mapaRegistro").html("");
+
+            var latitude = "", longitude = "";
+
+            $(linha.cells).each(function (ex) {
+                if (ex == 2) {
+                    latitude = linha.cells[ex].textContent;
+                } else if (ex == 3) {
+                    longitude = linha.cells[ex].textContent;
+                }
+            });
+
+            if (latitude === "" || longitude === "") {
+                $("#mapaRegistro").html("");
+            } else {
+                $("#mapaRegistro").append('<iframe id="mapaRegistro" width="100%" height="600" src="https://maps.google.com/maps?width=100%&amp;' +
+                    'height=600&amp;hl=en&amp;coord=' + latitude + ', ' + longitude + '&amp;q=' + latitude + '%2C%20' + longitude + '+(My%20Business%20Name)&amp;ie=UTF8&amp;t=&amp;' +
+                    'z=14&amp;iwloc=B&amp;output=embed"frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.maps.ie/' +
+                    'create-google-map/">Create Google Map</a></iframe>');
+
+                $('html, body').animate({
+                    scrollTop: $('#mapaRegistro').offset().top
+                }, 1000);
+            }
+
+        }
+    </script>
+
+    <style>
+        .tg {
+        border-collapse: collapse;
+        table-layout: fixed;
+        }
+
+        .tg thead {
+        display: block;
+        width: 100%;
+        }
+
+        .tg tbody {
+        height: 450px;
+        width: 100%;
+        display: block;
+        overflow-y: auto;
+        overflow-x: hidden;
+        }
+
+        .tg td {
+        padding: 10px 10px;
+        overflow: hidden;
+        border-bottom: 1px solid #ddd;
+        }
+
+        .tg tr:hover {
+        background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body onload="carregaPagina();">
+    <div class="container">
+        <br><br>
+        <h1 style="text-align: center">Estabelecimentos de Saúde - CNES</h1>
+        <hr><br>
+
+        <h4 id="carregandoRegistros" style="text-align: center; color: #808080"><br> Os registros estão sendo
+            carregados. Aguarde...</h4>
+
+        <div id="conteudo" style="display: none">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" id="campoPesquisar" type="text" placeholder="Digite para pesquisar..."
+                            onkeyup="campoPesquisar(this.value)">
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom" style="display: none" id="iconLoading"></i>
+                </div>
+
+                <div class="col-md-5" style="text-align: right">
+                    <h6 style="text-align: right; color: #808080; font-size: 12px">* Clique na linha que deseja
+                        visualizar a localização</h6>
+                </div>
+            </div>
+
+            <label id="resultadoLista"></label>
+            <table class="table table-striped tg tblEstabelecimentoSaude" id="tblEstabelecimentoSaude">
+                <thead>
+                    <tr>
+                        <th class="alert-info" style="width: 178px">Cód</td>
+                        <th class="alert-info" style="width: 535px">Razão Social</td>
+                        <th class="alert-info" style="width: 193px">Latitude</td>
+                        <th class="alert-info" style="width: 201px">Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="width: 100%" id="mapaRegistro">
+        </div><br />
+    </div>
+</body>
+
+</html>
