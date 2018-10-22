@@ -12,7 +12,7 @@ ter. DIGITE APENAS O NOME DO ARQUIVO, NÃO COLOQUE A ENTENSÃO .JSON
 
 ###
 
-A página hmtl deve ser aberta com uma conexão http, para que o arquivo JSON
+A página html deve ser aberta com uma conexão http, para que o arquivo JSON
 possa ser lido normalmente.
 
 
